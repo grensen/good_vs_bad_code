@@ -16,6 +16,11 @@
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/good_vs_bad_demo_dotnet7.png?raw=true">
 </p>
 
+## Floating Point "Features"
+<p align="center">
+  <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/single_vs_one_piece.png?raw=true">
+</p>
+
 ## Language Efficiency
 <p align="center">
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/language_efficiency.png?raw=true">
