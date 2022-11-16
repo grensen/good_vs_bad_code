@@ -37,3 +37,4 @@ https://www.youtube.com/watch?v=y4HV5m5GR7o
 <p align="center">
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/language_efficiency.png?raw=true">
 </p>
+https://greenlab.di.uminho.pt/wp-content/uploads/2017/09/paperSLE.pdf
