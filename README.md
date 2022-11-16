@@ -16,6 +16,18 @@
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/good_vs_bad_demo_dotnet7.png?raw=true">
 </p>
 
+## Visual Studio Profiler
+<p align="center">
+  <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/vs_profiler_modules.png?raw=true">
+</p>
+https://www.youtube.com/watch?v=y4HV5m5GR7o
+
+## Feed Forward Cost Details
+<p align="center">
+  <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/vs_profiler_caller_info.png?raw=true">
+</p>
+
+
 ## Floating Point "Features"
 <p align="center">
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/single_vs_one_piece.png?raw=true">
