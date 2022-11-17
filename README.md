@@ -32,6 +32,19 @@ for (; i < n; i++)
     sum += data[i];
 ~~~
 
+## Implementation Details That Can Count
+~~~cs
+// a first?
+float[] a;
+int b;
+~~~cs
+
+~~~
+// or b first? 
+int b;
+float[] a;
+~~~
+
 ## Visual Studio Profiler
 <p align="center">
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/vs_profiler_modules.png?raw=true">
