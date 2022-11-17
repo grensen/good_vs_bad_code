@@ -23,13 +23,13 @@ int i = 0;
 if (unrolling)
     for (; i < n - 4; i += 4)
     {
-        sum1 += data[i + 0];
-        sum2 += data[i + 1];
-        sum3 += data[i + 2];
-        sum4 += data[i + 3];
+        sum += data[i + 0];
+        sum += data[i + 1];
+        sum += data[i + 2];
+        sum += data[i + 3];
     }
 for (; i < n; i++)
-    sum1 += data[i];
+    sum += data[i];
 ~~~
 
 ## Visual Studio Profiler
