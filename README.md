@@ -16,6 +16,22 @@
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/good_vs_bad_demo_dotnet7.png?raw=true">
 </p>
 
+## How To Unroll a Loop
+~~~cs
+int n = 100;
+int i = 0;
+if (unrolling)
+    for (; i < n - 4; i += 4)
+    {
+        sum1 += data[i + 0];
+        sum2 += data[i + 1];
+        sum3 += data[i + 2];
+        sum4 += data[i + 3];
+    }
+for (; i < n; i++)
+    sum1 += data[i];
+~~~
+
 ## Visual Studio Profiler
 <p align="center">
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/vs_profiler_modules.png?raw=true">
