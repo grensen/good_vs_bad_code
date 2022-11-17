@@ -37,9 +37,9 @@ for (; i < n; i++)
 // a first?
 float[] a;
 int b;
-~~~cs
-
 ~~~
+
+~~~cs
 // or b first? 
 int b;
 float[] a;
