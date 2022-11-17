@@ -47,7 +47,7 @@ old paper: https://www.itu.dk/people/sestoft/papers/numericperformance.pdf
 
 ## EFFICIENT MATRIX MULTIPLICATION USING HARDWAREINTRINSICS AND PARALLELISM WITH C#
 <p align="center">
-  <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/c_cs_java_numeric_perf.png?raw=true">
+  <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/efficient_matrix_multiplication.png?raw=true">
 </p>
 https://docplayer.net/227695722-Efficient-matrix-multiplication-using-hardware-intrinsics-and-parallelism-with-c.html
 
