@@ -38,3 +38,10 @@ https://www.youtube.com/watch?v=y4HV5m5GR7o
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/language_efficiency.png?raw=true">
 </p>
 https://greenlab.di.uminho.pt/wp-content/uploads/2017/09/paperSLE.pdf
+
+## Numeric performance in C, C# and Java
+<p align="center">
+  <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/c_cs_java_numeric_perf.png?raw=true">
+</p>
+old paper: https://www.itu.dk/people/sestoft/papers/numericperformance.pdf
+
