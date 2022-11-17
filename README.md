@@ -45,3 +45,9 @@ https://greenlab.di.uminho.pt/wp-content/uploads/2017/09/paperSLE.pdf
 </p>
 old paper: https://www.itu.dk/people/sestoft/papers/numericperformance.pdf
 
+## EFFICIENT MATRIX MULTIPLICATION USING HARDWAREINTRINSICS AND PARALLELISM WITH C#
+<p align="center">
+  <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/c_cs_java_numeric_perf.png?raw=true">
+</p>
+https://docplayer.net/227695722-Efficient-matrix-multiplication-using-hardware-intrinsics-and-parallelism-with-c.html
+
