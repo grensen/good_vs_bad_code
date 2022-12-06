@@ -59,31 +59,30 @@ https://www.youtube.com/watch?v=y4HV5m5GR7o
 
 ## Array vs. Span Assembly On sharplab.io
 ~~~cs
-static void SumProductToSpan(Span<float> neuron, Span<float> wts, float n)
+static void SumProductToSpan(Span<float> neurons, Span<float> weights, float n)
 {    
-    for(int r = 0; r < neuron.Length; r++)
+    for(int r = 0; r < neurons.Length; r++)
     {                 
-       neuron[r] = neuron[r] + wts[r] * n;
+       neurons[r] = neurons[r] + weights[r] * n;
     }   
 }
 
-static void SumProductToArray(float[] neuron, float[] wts, float n)
+static void SumProductToArray(float[] neurons, float[] weights, float n)
 {    
-    for(int r = 0; r < neuron.Length; r++)
+    for(int r = 0; r < neurons.Length; r++)
     {                 
-       neuron[r] = neuron[r] + wts[r] * n;
+       neurons[r] = neurons[r] + weights[r] * n;
     }   
 }
-
 ~~~
 https://sharplab.io/
 
-## Instructions for Array With .NET 7
+## Assembly Instructions Array
 <p align="center">
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/asm_array.png?raw=true">
 </p>
 
-## Instructions for Span With .NET 7
+## Assembly Instructions Span
 <p align="center">
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/asm_span.png?raw=true">
 </p>
