@@ -92,6 +92,12 @@ https://sharplab.io/
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/single_vs_one_piece.png?raw=true">
 </p>
 
+## SIMD
+<p align="center">
+  <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/simd_bench.png?raw=true">
+</p>
+https://devblogs.microsoft.com/dotnet/hardware-intrinsics-in-net-core/
+
 ## Language Efficiency
 <p align="center">
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/language_efficiency.png?raw=true">
