@@ -93,7 +93,7 @@ https://sharplab.io/
 
 ## Default Implementation With Arrays
 ~~~cs
-static void FeedForward//DefaultArray
+static void FeedForwardDefaultArray
     (float[] neurons, float[] weights, int[] net)
 {
     for (int i = 0, j = 0, k = net[0], m = 0; i < net.Length - 1; i++)
@@ -114,7 +114,7 @@ static void FeedForward//DefaultArray
 
 ## Default Arrays Unrolled
 ~~~cs
-static void FeedForward//DefaultArrayUnrolled
+static void FeedForwardDefaultArrayUnrolled
     (float[] neurons, float[] weights, int[] net)
 {
     for (int i = 0, j = 0, k = net[0], m = 0; i < net.Length - 1; i++)
@@ -149,7 +149,7 @@ static void FeedForward//DefaultArrayUnrolled
 
 ## Default Implementation With Spans
 ~~~cs
-static void FeedForward//DefaultSpanEachInput                             
+static void FeedForwardDefaultSpanEachInput                             
     (Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
 {
     for (int i = 0, j = 0, k = net[0], m = 0; i < net.Length - 1; i++)
@@ -171,7 +171,7 @@ static void FeedForward//DefaultSpanEachInput
 
 ## Spans Layer Wise
 ~~~cs
-static void FeedForward//DefaultSpanEachLayer
+static void FeedForwardDefaultSpanEachLayer
     (Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
 {
     for (int i = 0, j = 0, k = net[0], m = 0; i < net.Length - 1; i++)
@@ -194,7 +194,7 @@ static void FeedForward//DefaultSpanEachLayer
 
 ## Advanced Vector SIMD
 ~~~cs
-static void FeedForward//VectorSIMD
+static void FeedForwardVectorSIMD
    (Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
 {
     for (int k = net[0], w = 0, i = 0; i < net.Length - 1; i++)
@@ -225,7 +225,7 @@ static void FeedForward//VectorSIMD
 
 ## Advanced Vector SIMD No Copy
 ~~~cs
-static void FeedForward//VectorSIMDNoCopy
+static void FeedForwardVectorSIMDNoCopy
     (Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
 {
     for (int k = net[0], w = 0, i = 0; i < net.Length - 1; i++)
