@@ -56,7 +56,6 @@ https://www.youtube.com/watch?v=y4HV5m5GR7o
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/vs_profiler_caller_info.png?raw=true">
 </p>
 
-
 ## Array vs. Span Assembly On sharplab.io
 ~~~cs
 static void SumProductToSpan(Span<float> neurons, Span<float> weights, float n)
@@ -113,6 +112,39 @@ https://sharplab.io/
         }
 ~~~
 
+## Default Arrays Unrolled
+        static void FeedForward//DefaultArrayUnrolled
+            (float[] neurons, float[] weights, int[] net)
+        {
+            for (int i = 0, j = 0, k = net[0], m = 0; i < net.Length - 1; i++)
+            {
+                int left = net[i], right = net[i + 1];
+                for (int l = 0, w = m; l < left; l++)
+                {
+                    float n = neurons[j + l];
+                    if (n > 0)
+                    {
+                        int r = 0;
+                        for (; r < right - 8; r = 8 + r)
+                        {
+                            neurons[k + r] = n * weights[w + r] + neurons[k + r];
+                            neurons[k + r + 1] = n * weights[w + r + 1] + neurons[k + r + 1]; 
+                            neurons[k + r + 2] = n * weights[w + r + 2] + neurons[k + r + 2];
+                            neurons[k + r + 3] = n * weights[w + r + 3] + neurons[k + r + 3]; 
+                            neurons[k + r + 4] = n * weights[w + r + 4] + neurons[k + r + 4];
+                            neurons[k + r + 5] = n * weights[w + r + 5] + neurons[k + r + 5]; 
+                            neurons[k + r + 6] = n * weights[w + r + 6] + neurons[k + r + 6];
+                            neurons[k + r + 7] = n * weights[w + r + 7] + neurons[k + r + 7];
+                        }
+                        for (; r < right; r++)
+                            neurons[k + r] += n * weights[w + r];
+                    }
+                    w += right;
+                }
+                m += left * right; j += left; k += right;
+            }
+        }
+
 ## Default Implementation With Spans
 ~~~cs
         static void FeedForward//DefaultSpanEachInput                             
@@ -160,7 +192,7 @@ https://sharplab.io/
 
 ## Advanced Vector SIMD
 ~~~cs
-        static void FeedForwardVectorSIMD
+        static void FeedForward//VectorSIMD
            (Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
         {
             for (int k = net[0], w = 0, i = 0; i < net.Length - 1; i++)
@@ -191,7 +223,7 @@ https://sharplab.io/
 
 ## Advanced Vector SIMD No Copy
 ~~~cs
-        static void FeedForwardVectorSIMDNoCopy
+        static void FeedForward//VectorSIMDNoCopy
             (Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
         {
             for (int k = net[0], w = 0, i = 0; i < net.Length - 1; i++)
