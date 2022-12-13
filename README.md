@@ -93,160 +93,162 @@ https://sharplab.io/
 
 ## Default Implementation With Arrays
 ~~~cs
-        static void FeedForward//DefaultArray
-            (float[] neurons, float[] weights, int[] net)
+static void FeedForward//DefaultArray
+    (float[] neurons, float[] weights, int[] net)
+{
+    for (int i = 0, j = 0, k = net[0], m = 0; i < net.Length - 1; i++)
+    {
+        int left = net[i], right = net[i + 1];
+        for (int l = 0, w = m; l < left; l++)
         {
-            for (int i = 0, j = 0, k = net[0], m = 0; i < net.Length - 1; i++)
-            {
-                int left = net[i], right = net[i + 1];
-                for (int l = 0, w = m; l < left; l++)
-                {
-                    float n = neurons[j + l];
-                    if (n > 0)
-                        for (int r = 0; r < right; r++)
-                            neurons[k + r] += n * weights[w + r];
-                    w += right;
-                }
-                m += left * right; j += left; k += right;
-            }
+            float n = neurons[j + l];
+            if (n > 0)
+                for (int r = 0; r < right; r++)
+                    neurons[k + r] += n * weights[w + r];
+            w += right;
         }
+        m += left * right; j += left; k += right;
+    }
+}
 ~~~
 
 ## Default Arrays Unrolled
-        static void FeedForward//DefaultArrayUnrolled
-            (float[] neurons, float[] weights, int[] net)
+~~~cs
+static void FeedForward//DefaultArrayUnrolled
+    (float[] neurons, float[] weights, int[] net)
+{
+    for (int i = 0, j = 0, k = net[0], m = 0; i < net.Length - 1; i++)
+    {
+        int left = net[i], right = net[i + 1];
+        for (int l = 0, w = m; l < left; l++)
         {
-            for (int i = 0, j = 0, k = net[0], m = 0; i < net.Length - 1; i++)
+            float n = neurons[j + l];
+            if (n > 0)
             {
-                int left = net[i], right = net[i + 1];
-                for (int l = 0, w = m; l < left; l++)
+                int r = 0;
+                for (; r < right - 8; r = 8 + r)
                 {
-                    float n = neurons[j + l];
-                    if (n > 0)
-                    {
-                        int r = 0;
-                        for (; r < right - 8; r = 8 + r)
-                        {
-                            neurons[k + r] = n * weights[w + r] + neurons[k + r];
-                            neurons[k + r + 1] = n * weights[w + r + 1] + neurons[k + r + 1]; 
-                            neurons[k + r + 2] = n * weights[w + r + 2] + neurons[k + r + 2];
-                            neurons[k + r + 3] = n * weights[w + r + 3] + neurons[k + r + 3]; 
-                            neurons[k + r + 4] = n * weights[w + r + 4] + neurons[k + r + 4];
-                            neurons[k + r + 5] = n * weights[w + r + 5] + neurons[k + r + 5]; 
-                            neurons[k + r + 6] = n * weights[w + r + 6] + neurons[k + r + 6];
-                            neurons[k + r + 7] = n * weights[w + r + 7] + neurons[k + r + 7];
-                        }
-                        for (; r < right; r++)
-                            neurons[k + r] += n * weights[w + r];
-                    }
-                    w += right;
+                    neurons[k + r] = n * weights[w + r] + neurons[k + r];
+                    neurons[k + r + 1] = n * weights[w + r + 1] + neurons[k + r + 1]; 
+                    neurons[k + r + 2] = n * weights[w + r + 2] + neurons[k + r + 2];
+                    neurons[k + r + 3] = n * weights[w + r + 3] + neurons[k + r + 3]; 
+                    neurons[k + r + 4] = n * weights[w + r + 4] + neurons[k + r + 4];
+                    neurons[k + r + 5] = n * weights[w + r + 5] + neurons[k + r + 5]; 
+                    neurons[k + r + 6] = n * weights[w + r + 6] + neurons[k + r + 6];
+                    neurons[k + r + 7] = n * weights[w + r + 7] + neurons[k + r + 7];
                 }
-                m += left * right; j += left; k += right;
+                for (; r < right; r++)
+                    neurons[k + r] += n * weights[w + r];
             }
+            w += right;
         }
+        m += left * right; j += left; k += right;
+    }
+}
+~~~
 
 ## Default Implementation With Spans
 ~~~cs
-        static void FeedForward//DefaultSpanEachInput                             
-            (Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
+static void FeedForward//DefaultSpanEachInput                             
+    (Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
+{
+    for (int i = 0, j = 0, k = net[0], m = 0; i < net.Length - 1; i++)
+    {
+        int left = net[i], right = net[i + 1];
+        for (int l = 0, w = m; l < left; l++, w += right)
         {
-            for (int i = 0, j = 0, k = net[0], m = 0; i < net.Length - 1; i++)
-            {
-                int left = net[i], right = net[i + 1];
-                for (int l = 0, w = m; l < left; l++, w += right)
-                {
-                    float n = neurons[j + l];
-                    if (n <= 0) continue;
-                    ReadOnlySpan<float> localWts = weights.Slice(w, right);
-                    Span<float> localOut = neurons.Slice(k, right);
-                    for (int r = 0; r < localOut.Length; r++)
-                        localOut[r] = localWts[r] * n + localOut[r];               
-                }
-                m += left * right; j += left; k += right;
-            }
+            float n = neurons[j + l];
+            if (n <= 0) continue;
+            ReadOnlySpan<float> localWts = weights.Slice(w, right);
+            Span<float> localOut = neurons.Slice(k, right);
+            for (int r = 0; r < localOut.Length; r++)
+                localOut[r] = localWts[r] * n + localOut[r];               
         }
+        m += left * right; j += left; k += right;
+    }
+}
 ~~~
 
 ## Spans Layer Wise
 ~~~cs
-        static void FeedForward//DefaultSpanEachLayer
-            (Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
+static void FeedForward//DefaultSpanEachLayer
+    (Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
+{
+    for (int i = 0, j = 0, k = net[0], m = 0; i < net.Length - 1; i++)
+    {
+        int left = net[i], right = net[i + 1];
+        Span<float> localOut = stackalloc float[right];
+        for (int l = 0, w = m; l < left; l++, w += right)
         {
-            for (int i = 0, j = 0, k = net[0], m = 0; i < net.Length - 1; i++)
-            {
-                int left = net[i], right = net[i + 1];
-                Span<float> localOut = stackalloc float[right];
-                for (int l = 0, w = m; l < left; l++, w += right)
-                {
-                    float n = neurons[j + l];
-                    if (n <= 0) continue;
-                    ReadOnlySpan<float> localWts = weights.Slice(w, right);               
-                    for (int r = 0; r < localOut.Length; r++)
-                        localOut[r] = localWts[r] * n + localOut[r];
-                }
-                localOut.CopyTo(neurons.Slice(k, right));
-                m += left * right; j += left; k += right;
-            }
+            float n = neurons[j + l];
+            if (n <= 0) continue;
+            ReadOnlySpan<float> localWts = weights.Slice(w, right);               
+            for (int r = 0; r < localOut.Length; r++)
+                localOut[r] = localWts[r] * n + localOut[r];
         }
+        localOut.CopyTo(neurons.Slice(k, right));
+        m += left * right; j += left; k += right;
+    }
+}
 ~~~
 
 ## Advanced Vector SIMD
 ~~~cs
-        static void FeedForward//VectorSIMD
-           (Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
+static void FeedForward//VectorSIMD
+   (Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
+{
+    for (int k = net[0], w = 0, i = 0; i < net.Length - 1; i++)
+    {
+        ReadOnlySpan<float> localInp = neurons.Slice(k - net[i], net[i]);
+        Span<float> localOut = stackalloc float[net[i + 1]];
+        for (int l = 0; l < net[i]; w = localOut.Length + w, l++)
         {
-            for (int k = net[0], w = 0, i = 0; i < net.Length - 1; i++)
+            float n = localInp[l];
+            if (n <= 0) continue;
+            ReadOnlySpan<float> wts = weights.Slice(w, localOut.Length);
+            int r = 0;
+            for (; r < localOut.Length - Vector<float>.Count; r += Vector<float>.Count)
             {
-                ReadOnlySpan<float> localInp = neurons.Slice(k - net[i], net[i]);
-                Span<float> localOut = stackalloc float[net[i + 1]];
-                for (int l = 0; l < net[i]; w = localOut.Length + w, l++)
-                {
-                    float n = localInp[l];
-                    if (n <= 0) continue;
-                    ReadOnlySpan<float> wts = weights.Slice(w, localOut.Length);
-                    int r = 0;
-                    for (; r < localOut.Length - Vector<float>.Count; r += Vector<float>.Count)
-                    {
-                        Vector<float> va = new Vector<float>(localOut.Slice(r, Vector<float>.Count));
-                        Vector<float> vb = new Vector<float>(wts.Slice(r, Vector<float>.Count));
-                        va += vb * n;
-                        va.CopyTo(localOut.Slice(r, Vector<float>.Count));
-                    }
-                    for (; r < localOut.Length; ++r)
-                        localOut[r] = wts[r] * n + localOut[r];
-                }
-                localOut.CopyTo(neurons.Slice(k, net[i + 1]));
-                k = localOut.Length + k;
+                Vector<float> va = new Vector<float>(localOut.Slice(r, Vector<float>.Count));
+                Vector<float> vb = new Vector<float>(wts.Slice(r, Vector<float>.Count));
+                va += vb * n;
+                va.CopyTo(localOut.Slice(r, Vector<float>.Count));
             }
+            for (; r < localOut.Length; ++r)
+                localOut[r] = wts[r] * n + localOut[r];
         }
+        localOut.CopyTo(neurons.Slice(k, net[i + 1]));
+        k = localOut.Length + k;
+    }
+}
 ~~~
 
 ## Advanced Vector SIMD No Copy
 ~~~cs
-        static void FeedForward//VectorSIMDNoCopy
-            (Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
+static void FeedForward//VectorSIMDNoCopy
+    (Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
+{
+    for (int k = net[0], w = 0, i = 0; i < net.Length - 1; i++)
+    {
+        ReadOnlySpan<float> localInp = neurons.Slice(k - net[i], net[i]);
+        Span<float> localOut = stackalloc float[net[i + 1]];                         
+        for (int l = 0; l < localInp.Length; w = w + localOut.Length, l++)
         {
-            for (int k = net[0], w = 0, i = 0; i < net.Length - 1; i++)
-            {
-                ReadOnlySpan<float> localInp = neurons.Slice(k - net[i], net[i]);
-                Span<float> localOut = stackalloc float[net[i + 1]];                         
-                for (int l = 0; l < localInp.Length; w = w + localOut.Length, l++)
-                {
-                    float n = localInp[l];
-                    if (n <= 0) continue;
-                    ReadOnlySpan<float> wts = weights.Slice(w, localOut.Length);
-                    ReadOnlySpan<Vector<float>> wtsVecArray = MemoryMarshal.Cast<float, Vector<float>>(wts);
-                    Span<Vector<float>> resultsVecArray = MemoryMarshal.Cast<float, Vector<float>>(localOut);
-                    for (int v = 0; v < resultsVecArray.Length; v++)
-                        resultsVecArray[v] = wtsVecArray[v] * n + resultsVecArray[v];
-                    for (int r = wtsVecArray.Length * Vector<float>.Count; r < localOut.Length; r++)
-                        localOut[r] = wts[r] * n + localOut[r];
-                }
-                Span<float> activations = neurons.Slice(k, localOut.Length);
-                localOut.CopyTo(activations);
-                k = localOut.Length + k;
-            }
+            float n = localInp[l];
+            if (n <= 0) continue;
+            ReadOnlySpan<float> wts = weights.Slice(w, localOut.Length);
+            ReadOnlySpan<Vector<float>> wtsVecArray = MemoryMarshal.Cast<float, Vector<float>>(wts);
+            Span<Vector<float>> resultsVecArray = MemoryMarshal.Cast<float, Vector<float>>(localOut);
+            for (int v = 0; v < resultsVecArray.Length; v++)
+                resultsVecArray[v] = wtsVecArray[v] * n + resultsVecArray[v];
+            for (int r = wtsVecArray.Length * Vector<float>.Count; r < localOut.Length; r++)
+                localOut[r] = wts[r] * n + localOut[r];
         }
+        Span<float> activations = neurons.Slice(k, localOut.Length);
+        localOut.CopyTo(activations);
+        k = localOut.Length + k;
+    }
+}
 ~~~
 
 ## SIMD
