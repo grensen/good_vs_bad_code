@@ -113,8 +113,7 @@ static void FeedForwardDefaultArray(float[] neurons, float[] weights, int[] net)
 
 ## Default Arrays Unrolled
 ~~~cs
-static void FeedForwardDefaultArrayUnrolled
-    (float[] neurons, float[] weights, int[] net)
+static void FeedForwardDefaultArrayUnrolled(float[] neurons, float[] weights, int[] net)
 {
     for (int i = 0, j = 0, k = net[0], m = 0; i < net.Length - 1; i++)
     {
@@ -148,8 +147,7 @@ static void FeedForwardDefaultArrayUnrolled
 
 ## Default Implementation With Spans
 ~~~cs
-static void FeedForwardDefaultSpanEachInput                             
-    (Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
+static void FeedForwardDefaultSpanEachInput(Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
 {
     for (int i = 0, j = 0, k = net[0], m = 0; i < net.Length - 1; i++)
     {
@@ -170,8 +168,7 @@ static void FeedForwardDefaultSpanEachInput
 
 ## Spans Layer Wise
 ~~~cs
-static void FeedForwardDefaultSpanEachLayer
-    (Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
+static void FeedForwardDefaultSpanEachLayer(Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
 {
     for (int i = 0, j = 0, k = net[0], m = 0; i < net.Length - 1; i++)
     {
@@ -193,8 +190,7 @@ static void FeedForwardDefaultSpanEachLayer
 
 ## Advanced Vector SIMD
 ~~~cs
-static void FeedForwardVectorSIMD
-   (Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
+static void FeedForwardVectorSIMD(Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
 {
     for (int k = net[0], w = 0, i = 0; i < net.Length - 1; i++)
     {
@@ -224,8 +220,7 @@ static void FeedForwardVectorSIMD
 
 ## Advanced Vector SIMD No Copy
 ~~~cs
-static void FeedForwardVectorSIMDNoCopy
-    (Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
+static void FeedForwardVectorSIMDNoCopy(Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
 {
     for (int k = net[0], w = 0, i = 0; i < net.Length - 1; i++)
     {
