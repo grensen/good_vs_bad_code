@@ -93,8 +93,7 @@ https://sharplab.io/
 
 ## Default Implementation With Arrays
 ~~~cs
-static void FeedForwardDefaultArray
-    (float[] neurons, float[] weights, int[] net)
+static void FeedForwardDefaultArray(float[] neurons, float[] weights, int[] net)
 {
     for (int i = 0, j = 0, k = net[0], m = 0; i < net.Length - 1; i++)
     {
