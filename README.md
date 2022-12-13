@@ -166,24 +166,25 @@ static void FeedForwardDefaultSpanEachInput(Span<float> neurons, ReadOnlySpan<fl
 }
 ~~~
 
-## Spans Layer Wise
+## Advanced Spans Layer Wise
 ~~~cs
-static void FeedForwardDefaultSpanEachLayer(Span<float> neurons, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
+static void FeedForwardAdvancedSpanEachLayer(Span<float> neuron, ReadOnlySpan<float> weights, ReadOnlySpan<int> net)
 {
-    for (int i = 0, j = 0, k = net[0], m = 0; i < net.Length - 1; i++)
+    for (int k = net[0], w = 0, i = 0; i < net.Length - 1; i++)
     {
-        int left = net[i], right = net[i + 1];
-        Span<float> localOut = stackalloc float[right];
-        for (int l = 0, w = m; l < left; l++, w += right)
+        Span<float> activations = neuron.Slice(k, net[i + 1]);
+        ReadOnlySpan<float> localInp = neuron.Slice(k - net[i], net[i]);
+        Span<float> localOut = stackalloc float[net[i + 1]];
+        for (int l = 0; l < net[i]; w = w + localOut.Length, l++)
         {
-            float n = neurons[j + l];
+            float n = localInp[l];
             if (n <= 0) continue;
-            ReadOnlySpan<float> localWts = weights.Slice(w, right);               
+            ReadOnlySpan<float> wts = weights.Slice(w, localOut.Length);
             for (int r = 0; r < localOut.Length; r++)
-                localOut[r] = localWts[r] * n + localOut[r];
+                localOut[r] = wts[r] * n + localOut[r];
         }
-        localOut.CopyTo(neurons.Slice(k, right));
-        m += left * right; j += left; k += right;
+        k = localOut.Length + k;
+        localOut.CopyTo(activations);
     }
 }
 ~~~
