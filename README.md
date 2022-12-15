@@ -91,7 +91,7 @@ https://sharplab.io/
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/single_vs_one_piece.png?raw=true">
 </p>
 
-## Default Implementation With Arrays
+## Forward Propagation Default Implementation With Arrays
 ~~~cs
 static void FeedForwardDefaultArray(float[] neurons, float[] weights, int[] net)
 {
@@ -242,6 +242,38 @@ static void FeedForwardVectorSIMDNoCopy(Span<float> neurons, ReadOnlySpan<float>
         Span<float> activations = neurons.Slice(k, localOut.Length);
         localOut.CopyTo(activations);
         k = localOut.Length + k;
+    }
+}
+~~~
+
+## Update Weights Default
+~~~cs
+static void UpdateDefault(float[] weight, float[] delta, float lr, float mom)
+{
+    for (int w = 0; w < weight.Length; w++)
+    {
+        var d = delta[w] * lr;
+        weight[w] += d;
+        delta[w] *= mom;
+    }  
+}
+~~~
+
+## Update Weights SIMD
+~~~cs
+static void UpdateSIMDNoCopy(float[] weight, float[] delta, float lr, float mom)
+{
+    Span<Vector<float>> weightVecArray = MemoryMarshal.Cast<float, Vector<float>>(weight.AsSpan());
+    Span<Vector<float>> deltaVecArray = MemoryMarshal.Cast<float, Vector<float>>(delta.AsSpan());
+    for (int v = 0; v < weightVecArray.Length; v++)
+    {
+        weightVecArray[v] += deltaVecArray[v] * lr;
+        deltaVecArray[v] *= mom;
+    }
+    for (int w = weightVecArray.Length * Vector<float>.Count; w < weight.Length; w++)
+    {
+        weight[w] += delta[w] * lr;
+        delta[w] *= mom;
     }
 }
 ~~~
