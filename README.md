@@ -263,8 +263,8 @@ static void UpdateDefault(float[] weight, float[] delta, float lr, float mom)
 ~~~cs
 static void UpdateSIMDNoCopy(float[] weight, float[] delta, float lr, float mom)
 {
-    Span<Vector<float>> weightVecArray = MemoryMarshal.Cast<float, Vector<float>>(weight.AsSpan());
-    Span<Vector<float>> deltaVecArray = MemoryMarshal.Cast<float, Vector<float>>(delta.AsSpan());
+    Span<Vector<float>> weightVecArray = MemoryMarshal.Cast<float, Vector<float>>(weight);
+    Span<Vector<float>> deltaVecArray = MemoryMarshal.Cast<float, Vector<float>>(delta);
     for (int v = 0; v < weightVecArray.Length; v++)
     {
         weightVecArray[v] += deltaVecArray[v] * lr;
