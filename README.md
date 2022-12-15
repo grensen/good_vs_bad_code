@@ -363,6 +363,43 @@ static void UpdateSIMDNoCopy(float[] weight, float[] delta, float lr, float mom)
 }
 ~~~
 
+## Update ChatGPT Version
+~~~cs
+static void UpdateChatGPT(float[] weight, float[] delta, float lr, float mom)
+{
+    // Pre-compute the values of lr and mom,
+    // and use local variables to store these values.
+    float lr_value = lr;
+    float mom_value = mom;
+
+    // Use the "unsafe" keyword to enable pointer arithmetic.
+    unsafe
+    {
+        // Use the "fixed" keyword to fix the arrays
+        // in memory and get a pointer to their elements.
+        fixed (float* w = weight, d = delta)
+        {
+            // Iterate over the elements in the arrays
+            // using pointer arithmetic.
+            for (int i = 0; i < weight.Length; i++)
+            {
+                // Use local variables to store the values
+                // of w[i] and d[i], and update these values
+                // using the += and *= operators.
+                float w_value = w[i];
+                float d_value = d[i];
+                w_value += d_value * lr_value;
+                d_value *= mom_value;
+
+                // Update the values in the arrays using
+                // the pointer and the dereference operator (*).
+                *(w + i) = w_value;
+                *(d + i) = d_value;
+            }
+        }
+    }
+}
+~~~
 
 ## SIMD
 <p align="center">
