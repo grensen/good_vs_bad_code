@@ -246,6 +246,91 @@ static void FeedForwardVectorSIMDNoCopy(Span<float> neurons, ReadOnlySpan<float>
 }
 ~~~
 
+## Backpropagation Default
+~~~cs
+static void Backprop(int[] net, float[] weights, float[] neuron, float[] delta, int target)
+{
+    Span<float> gradient = stackalloc float[neuron.Length];
+
+    for (int r = neuron.Length - net[^1], p = 0; r < neuron.Length; r++, p++)
+        gradient[r] = target == p ? 1 - neuron[r] : -neuron[r];
+
+    for (int i = net.Length - 2, j = neuron.Length - net[^1], k = neuron.Length, m = weights.Length; i >= 0; i--)
+    {
+        int right = net[i + 1], left = net[i];
+        k -= right; j -= left; m -= right * left;
+
+        for (int l = j, w = m; l < left + j; l++, w += right)
+        {
+            var n = neuron[l];
+            if (n > 0)
+            {
+                float sum = 0.0f;
+                for (int r = 0; r < right; r++)
+                {
+                    int wr = r + w;
+                    var g = gradient[k + r];
+                    sum += weights[wr] * g; delta[wr] += n * g;
+                }
+                gradient[l] = sum;
+            }
+        }
+    }
+}
+~~~
+
+## Backpropagation SIMD No Copy
+~~~cs
+static void BackpropSIMDNoCopy(int[] net, Span<float> weights, float[] neuron, Span<float> delta, int target)
+{
+    Span<float> gradient = stackalloc float[neuron.Length];
+
+    // output error gradients, hard target as 1 for its class
+    for (int r = neuron.Length - net[^1], p = 0; r < neuron.Length; r++, p++)
+        gradient[r] = target == p ? 1 - neuron[r] : -neuron[r];
+
+    for (int j = neuron.Length - net[^1], k = neuron.Length, m = weights.Length, i = net.Length - 2; i >= 0; i--)
+    {
+        int right = net[i + 1], left = net[i];
+        k -= right; j -= left; m -= right * left;
+        Span<float> gra = gradient.Slice(k, right);
+
+        for (int l = 0, w = m; l < left; l++, w += right)
+        {
+            var n = neuron[l + j];
+            if (n <= 0) continue;
+
+            Span<float> wts = weights.Slice(w, right);
+            Span<float> dts = delta.Slice(w, right);
+
+            Span<Vector<float>> graVec = MemoryMarshal.Cast<float, Vector<float>>(gra);
+            Span<Vector<float>> dtsVec = MemoryMarshal.Cast<float, Vector<float>>(dts);
+            Span<Vector<float>> wtsVec = MemoryMarshal.Cast<float, Vector<float>>(wts);
+
+            var sumVec = Vector<float>.Zero;  
+            for (int v = 0; v < wtsVec.Length; v++)
+            {
+                var gVec = graVec[v];
+                sumVec = wtsVec[v] * gVec + sumVec;
+                dtsVec[v] = n * gVec + dtsVec[v];
+            }
+
+            // changed float result with vector sum
+            float sum = Vector.Sum(sumVec);
+
+            for (int r = wtsVec.Length * Vector<float>.Count; r < wts.Length; r++)
+            {
+                var g = gra[r];
+                sum = wts[r] * g + sum;
+                dts[r] = n * g + dts[r];
+            }
+            gradient[l + j] = sum;
+        }
+    }
+}
+~~~
+
+
 ## Update Weights Default
 ~~~cs
 static void UpdateDefault(float[] weight, float[] delta, float lr, float mom)
@@ -277,6 +362,7 @@ static void UpdateSIMDNoCopy(float[] weight, float[] delta, float lr, float mom)
     }
 }
 ~~~
+
 
 ## SIMD
 <p align="center">
