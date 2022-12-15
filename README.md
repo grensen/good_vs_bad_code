@@ -401,6 +401,46 @@ static void UpdateChatGPT(float[] weight, float[] delta, float lr, float mom)
 }
 ~~~
 
+
+## ChatGPT With Hard Prompts
+~~~cs
+static void Update//ChatGPTUnrolledAVX2
+    (float[] weight, float[] delta, float lr, float mom)
+{
+    unsafe
+    {
+        fixed (float* w = weight, d = delta)
+        {
+            int i = 0;
+            for (; i < weight.Length - 7; i += 8)
+            {
+                // Load 8 floats from the weight and delta arrays.
+                var wVector = Avx2.LoadVector256(w + i);
+                var dVector = Avx2.LoadVector256(d + i);
+
+                // Convert the learning rate and momentum factors to vectors.
+                var lrVector = Avx2.BroadcastScalarToVector256(&lr);
+                var momVector = Avx2.BroadcastScalarToVector256(&mom);
+
+                // Update the weight and delta vectors using AVX2 instructions.
+                wVector += Avx2.Multiply(dVector, lrVector);
+                dVector *= momVector;
+
+                // Store the updated weight and delta vectors back to memory.
+                Avx2.Store(w + i, wVector);
+                Avx2.Store(d + i, dVector);
+            }
+            // Update the remaining elements using a regular for loop.
+            for (; i < weight.Length; i++)
+            {
+                w[i] += d[i] * lr;
+                d[i] *= mom;
+            }
+        }
+    }
+}
+~~~
+
 ## SIMD
 <p align="center">
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/simd_bench.png?raw=true">
