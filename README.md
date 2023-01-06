@@ -465,3 +465,24 @@ old paper: https://www.itu.dk/people/sestoft/papers/numericperformance.pdf
 </p>
 https://docplayer.net/227695722-Efficient-matrix-multiplication-using-hardware-intrinsics-and-parallelism-with-c.html
 
+## Benchmark code 109 Times Faster!
+<p align="center">
+  <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/benchmark.png?raw=true">
+</p>
+
+## 10 times Bigger With Linear Performance!
+<p align="center">
+  <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/benchmark_1000_demo.png?raw=true">
+</p>
+
+## 20 times Bigger 
+<p align="center">
+  <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/benchmark_2000_demo.png?raw=true">
+</p>
+
+## A 3000 X 3000 Layer! 
+<p align="center">
+  <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/benchmark_3000_demo.png?raw=true">
+</p>
+
+
