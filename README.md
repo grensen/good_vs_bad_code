@@ -485,4 +485,8 @@ https://docplayer.net/227695722-Efficient-matrix-multiplication-using-hardware-i
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/benchmark_3000_demo.png?raw=true">
 </p>
 
+## 1 Million Frames Per Second
+<p align="center">
+  <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/one_million_fps?raw=true">
+</p>
 
