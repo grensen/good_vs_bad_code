@@ -470,17 +470,17 @@ https://docplayer.net/227695722-Efficient-matrix-multiplication-using-hardware-i
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/benchmark.png?raw=true">
 </p>
 
-## 10 times Bigger With Linear Performance!
+## 50 Epochs With 1,794,000 Weights Take 23.19 Seconds
 <p align="center">
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/benchmark_1000_demo.png?raw=true">
 </p>
 
-## 20 times Bigger 
+## 50 Epochs With 5,588,000 Weights Take 64.80 Seconds 
 <p align="center">
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/benchmark_2000_demo.png?raw=true">
 </p>
 
-## A 3000 X 3000 Layer! 
+## 50 Epochs With 11,382,000 Weights Take 156.89 Seconds 
 <p align="center">
   <img src="https://github.com/grensen/good_vs_bad_code/blob/main/figures/benchmark_3000_demo.png?raw=true">
 </p>
