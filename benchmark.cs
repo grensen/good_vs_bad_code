@@ -1,5 +1,5 @@
 // https://github.com/grensen/good_vs_bad_code
-
+// C# 11 required
 using System.Numerics;
 using System.Runtime.InteropServices;
 
